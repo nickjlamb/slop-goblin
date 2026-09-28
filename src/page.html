@@ -1,0 +1,312 @@
+<title>The Slop Goblin</title>
+<link rel="icon" type="image/svg+xml" href="__FAVICON__">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --ground:#E8ECE2; --surface:#FBFCF8; --ink:#1B2216; --muted:#56614E; --line:#CBD3C0; --soft:#DFE6D5;
+  --goblin:#4B762A; --on-goblin:#FBFCF8; --tint:#D9E6C8;
+  --display:"Bagel Fat One","Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#11150E; --surface:#1A2016; --ink:#E4EAD9; --muted:#9CA791; --line:#2F3828; --soft:#242C1E;
+    --goblin:#8DBD5F; --on-goblin:#10150C; --tint:#26331C;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#11150E; --surface:#1A2016; --ink:#E4EAD9; --muted:#9CA791; --line:#2F3828; --soft:#242C1E;
+  --goblin:#8DBD5F; --on-goblin:#10150C; --tint:#26331C;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55}
+.page{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:28px 140px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:end;padding-block:8px 32px;border-bottom:2px solid var(--ink);margin-bottom:28px}
+.eyebrow{font:700 12px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--goblin);margin:0 0 14px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(50px,9vw,98px);line-height:.9;letter-spacing:-.01em;margin:0 0 18px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--goblin)}
+.lede{font-size:18px;line-height:1.5;max-width:32em;margin:0 0 24px}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.btn{font:700 15px/1 var(--body);padding:13px 18px;border-radius:999px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease;box-shadow:3px 3px 0 var(--ink)}
+.btn.primary{background:var(--goblin);color:var(--on-goblin)}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn:focus-visible,.bm:focus-visible,summary:focus-visible{outline:3px solid var(--goblin);outline-offset:3px}
+.btn.small{font-size:13px;padding:9px 13px}
+.btn.nudge{animation:nudge 1.4s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-3px) rotate(-1.5deg)}}
+
+.portraits{display:grid;gap:10px;justify-content:center}
+.stage{display:flex;align-items:flex-end;justify-content:center;gap:30px;border-bottom:3px solid var(--ink);padding-inline:14px}
+.stage div svg{display:block;width:100%;height:auto;overflow:visible}
+#p0{width:100px} #p1{width:204px}
+.caps{display:flex;justify-content:center;gap:30px;padding-inline:14px}
+.caps div{display:grid;gap:2px;text-align:center;font:500 12px/1.3 var(--mono);color:var(--muted)}
+.caps div:first-child{width:100px} .caps div:last-child{width:204px}
+.caps b{color:var(--ink);font-weight:700}
+
+/* layout */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:36px;align-items:start}
+.feed-col{max-width:600px;width:100%}
+.feed-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px;margin-bottom:12px;font:700 12px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.feed-head span{letter-spacing:0;text-transform:none;font-weight:500}
+.feed{display:grid;gap:12px}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px 12px}
+.post-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.avatar{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:700 15px/1 var(--body);color:#fff;letter-spacing:.02em}
+.name{font-weight:700;font-size:15px;line-height:1.3}
+.deg{color:var(--muted);font-weight:500}
+.headline{color:var(--muted);font-size:13px;line-height:1.35}
+.time{color:var(--muted);font-size:12px;line-height:1.5}
+.post-body p{margin:0 0 1.55em}
+.post-body p:last-child{margin-bottom:0}
+.post-text{position:relative}
+.post-text.clamped .post-body{max-height:4.65em;overflow:hidden}
+.more{position:absolute;right:0;bottom:0;border:0;padding:0 0 0 30px;font:600 15px/1.55 var(--body);color:var(--muted);cursor:pointer;background:linear-gradient(90deg,transparent,var(--surface) 26px)}
+.more:hover{color:var(--ink);text-decoration:underline}
+.more:focus-visible{outline:3px solid var(--goblin);outline-offset:2px}
+.post-stats{border-top:1px solid var(--line);padding-top:10px;margin-top:12px;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* sidebar */
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:grid;gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h2{font-family:var(--display);font-weight:400;font-size:25px;line-height:1.05;margin:0 0 10px}
+.card p{font-size:14px;color:var(--muted);margin:0 0 16px}
+.bm{display:inline-flex;align-items:center;gap:10px;background:var(--goblin);color:var(--on-goblin);text-decoration:none;font:800 15px/1 var(--body);padding:6px 18px 6px 6px;border-radius:999px;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);cursor:grab}
+.bm:active{cursor:grabbing}
+.bm .mini{width:36px;height:36px;border-radius:50%;background:var(--surface);display:grid;place-items:end center;overflow:hidden;padding:3px 2px 0}
+.bm .mini svg{width:34px;height:auto;display:block}
+.steps{margin:16px 0 14px;padding-left:20px;font-size:14px;display:grid;gap:7px}
+.steps li::marker{font-weight:800;color:var(--goblin)}
+kbd{font:600 11.5px/1 var(--mono);padding:2px 5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:var(--soft);color:var(--ink);white-space:nowrap}
+details{border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font-weight:700;font-size:14px}
+details p{margin:10px 0}
+textarea{display:block;width:100%;font:500 11px/1.4 var(--mono);background:var(--soft);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;resize:vertical;margin-bottom:10px;word-break:break-all}
+
+/* slop facts */
+.facts{background:var(--surface);color:var(--ink);border:2px solid var(--ink);padding:8px 11px 10px}
+.facts h2{font:900 34px/1 var(--body);letter-spacing:-.025em;margin:0 0 3px}
+.serv{font-size:13px;line-height:1.35;padding-bottom:6px;border-bottom:10px solid var(--ink)}
+.serv b{font-weight:800}
+.cal{display:flex;justify-content:space-between;align-items:baseline;font-weight:900;padding-block:2px 4px;border-bottom:5px solid var(--ink)}
+.cal span{font-size:19px} .cal b{font-size:32px;font-weight:900}
+.dv{text-align:right;font-size:11.5px;font-weight:800;padding-block:3px;border-bottom:1px solid var(--ink)}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding-block:3px;border-bottom:1px solid var(--ink);font-variant-numeric:tabular-nums}
+.row b{font-weight:800} .row.sub{padding-left:14px}
+.row:last-of-type{border-bottom:8px solid var(--ink)}
+.ing{font-size:12px;line-height:1.45;padding-top:7px;margin:0}
+.ing b{font-weight:800}
+.fine{font-size:11px;line-height:1.4;color:var(--muted);margin:8px 0 0}
+
+@media (max-width:880px){
+  .hero{grid-template-columns:1fr;gap:28px}
+  .layout{grid-template-columns:1fr}
+  .side{position:static}
+  .feed-col{max-width:none}
+}
+@media (max-width:420px){
+  #p0,.caps div:first-child{width:78px} #p1,.caps div:last-child{width:160px}
+  .stage,.caps{gap:18px}
+  .lede{font-size:16.5px}
+}
+.foot{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);display:grid;gap:8px;font-size:13px;color:var(--muted)}
+.foot p{margin:0}
+.foot a,.linklike{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.linklike{background:none;border:0;padding:0;font:inherit;font-weight:600;cursor:pointer}
+.share{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-bottom:6px}
+.share span{font:700 12px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--goblin)}
+.share a,.share .linklike{font-size:15px}
+.phone-note{display:none;font-size:14px;line-height:1.45;color:var(--muted);margin:14px 0 0;max-width:34em}
+.card .phone-note{margin:0 0 14px;color:var(--ink);background:var(--tint);border-radius:8px;padding:10px 12px}
+@media (pointer:coarse){ .phone-note{display:block} .desk-only{display:none} }
+@media (prefers-reduced-motion:reduce){ .btn,.btn.nudge{transition:none;animation:none} }
+</style>
+
+<div class="page">
+  <header class="hero" data-goblin-ignore>
+    <div>
+      <p class="eyebrow">A buzzword-eating pet for your feed</p>
+      <h1>The <em>Slop</em> Goblin</h1>
+      <p class="lede">It waddles down LinkedIn eating synergy, leverage and disruption, gets visibly fatter with every bite, and spits the plain-English version back into the post. Feed it the practice posts below, then install it as a bookmark and let it loose on the real thing.</p>
+      <div class="actions">
+        <button id="release" class="btn primary" type="button">Release the goblin</button>
+        <button id="refill" class="btn" type="button">Refill the feed</button>
+      </div>
+      <p class="phone-note">On a phone? Play with the practice feed here. The LinkedIn version needs a desktop browser, so send yourself the link for later.</p>
+    </div>
+    <div class="portraits" aria-label="The goblin before and after a week on LinkedIn">
+      <div class="stage"><div id="p0"></div><div id="p1"></div></div>
+      <div class="caps">
+        <div><b>Mon 09:00</b><span>0 buzzwords</span></div>
+        <div><b>Fri 17:30</b><span>84 buzzwords</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <section class="feed-col" aria-label="Practice feed">
+      <div class="feed-head" data-goblin-ignore>Practice feed <span>Invented people. Real vocabulary.</span></div>
+      <div class="feed" id="feed"></div>
+    </section>
+
+    <aside class="side" data-goblin-ignore>
+      <section class="card">
+        <h2>Take it to LinkedIn</h2>
+        <p>The goblin lives in a bookmark, so it works on LinkedIn or any page you like. It only changes what you see: nothing is posted, and nothing leaves your browser. Reload to get your words back.</p>
+        <p class="phone-note">Bookmarks can’t run the goblin on a phone. Open this page on a laptop or desktop to install him.</p>
+        <a id="bm" class="bm" href="#" title="Drag me to your bookmarks bar"><span class="mini" id="mini"></span>Slop Goblin</a>
+        <ol class="steps desk-only">
+          <li>Show your bookmarks bar: <kbd>⌘ ⇧ B</kbd> on a Mac, <kbd>Ctrl ⇧ B</kbd> on Windows.</li>
+          <li>Drag the green button onto the bar.</li>
+          <li>Open LinkedIn, click the bookmark. <kbd>Esc</kbd> sends the goblin home with the bill.</li>
+        </ol>
+        <details class="desk-only">
+          <summary>Can't drag it?</summary>
+          <p>Make a new bookmark called Slop Goblin and paste this into its URL field.</p>
+          <textarea id="code" rows="4" readonly spellcheck="false" aria-label="Bookmarklet code"></textarea>
+          <button id="copy" class="btn small" type="button">Copy code</button>
+        </details>
+      </section>
+
+      <section class="facts" aria-label="Slop Facts">
+        <h2>Slop Facts</h2>
+        <div class="serv"><b>Serving size</b> 1 buzzword (a phrase is up to 3)<br>Servings per feed: endless</div>
+        <div class="cal"><span>Calories</span><b>0</b></div>
+        <div class="dv">% Daily Value*</div>
+        <div class="row"><span><b>Total Air</b> 100g</span><b>100%</b></div>
+        <div class="row"><span><b>Substance</b> 0g</span><b>0%</b></div>
+        <div class="row"><span><b>Saturated Optimism</b> 12g</span><b>400%</b></div>
+        <div class="row"><span><b>Humblebrag</b> 9g</span><b>180%</b></div>
+        <div class="row sub"><span>Added Humility 0g</span><b>0%</b></div>
+        <div class="row"><span><b>Usable Insight</b> 0mg</span><b>0%</b></div>
+        <p class="ing"><b>Ingredients:</b> synergy, leverage, disruption, thought leadership, stakeholders, alignment, circling back, moving the needle, low-hanging fruit, paradigm shifts, deep dives, bandwidth, ecosystems, north stars, delve, tapestry, testament, game-changers, omnichannel, patient-centric, “Agree?” <span id="more"></span></p>
+        <p class="fine">*Percent of the daily value a thought leader needs to post before breakfast. May contain traces of an actual point.</p>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="foot" data-goblin-ignore>
+    <div class="share">
+      <span>Share the goblin</span>
+      <a id="share-li" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fslopgoblin.pharmatools.ai%2F" target="_blank" rel="noopener">LinkedIn</a>
+      <a id="share-x" href="https://twitter.com/intent/tweet?text=A%20goblin%20that%20eats%20LinkedIn%20buzzwords%20and%20spits%20out%20plain%20English&amp;url=https%3A%2F%2Fslopgoblin.pharmatools.ai%2F" target="_blank" rel="noopener">X</a>
+      <button id="share-copy" class="linklike" type="button">Copy link</button>
+    </div>
+    <p>Made by Nick Lamb at <a href="https://www.pharmatools.ai" target="_blank" rel="noopener">PharmaTools.AI</a> · <a href="https://github.com/nickjlamb/slop-goblin" target="_blank" rel="noopener">Source on GitHub</a> · Inspired by Hugo Duprez’s <a href="https://destroy.spritefusion.com" target="_blank" rel="noopener">Destroy</a></p>
+    <p>Runs entirely in your browser: no tracking, no data sent anywhere. Not affiliated with LinkedIn.</p>
+  </footer>
+</div>
+
+<script>window.__SLOP_GOBLIN_NO_AUTOSTART = true;</script>
+<script>
+/*__GOBLIN__*/
+</script>
+<script>
+(function () {
+  var BOOKMARKLET = "__BOOKMARKLET__";
+  var POSTS = [
+    { n: 'Priya Vantage', i: 'PV', c: '#7A5C99', h: 'Chief Synergy Officer at Northloop | Keynote speaker | Recovering perfectionist', t: '2h', s: '1,204 reactions · 318 comments · 41 reposts',
+      b: 'I’m thrilled to announce that after 11 incredible years, I’m embarking on a new journey.\n\nWhen I started, I had no idea what synergy meant. Today I leverage it every single day. I’m humbled by the stakeholders who empowered me to pivot, double down and ultimately disrupt myself.\n\nKey takeaways from my journey:\n→ Alignment is a mindset\n→ Bandwidth is a choice\n→ Your north star is the friends you made along the way\n\nAgree?' },
+    { n: 'Brad Keystone', i: 'BK', c: '#3F6E8C', h: 'Founder & CEO, Keystone Growth Partners | 3x exit | Girl dad', t: '5h', s: '8,932 reactions · 1,077 comments · 212 reposts',
+      b: 'My 4-year-old refused to eat her broccoli last night.\n\nMost parents would give up. I saw a stakeholder alignment problem.\n\nI reframed the broccoli as a best-in-class, value-add, cutting-edge vegetable. I gave her the bandwidth to ideate her own dinner. I let her own the outcome.\n\nShe ate three florets.\n\nThat’s the difference between managing and empowering.\n\nLet that sink in.' },
+    { n: 'Aurelia Stack', i: 'AS', c: '#A0522D', h: 'VP, AI Transformation at Paragon Dynamics | Speaker | Views my own', t: '1d', s: '644 reactions · 97 comments',
+      b: 'In today’s fast-paced digital landscape, it’s crucial to delve into the rich tapestry of AI-powered innovation.\n\nOur new platform is a testament to what happens when you harness the power of transformative technology to unlock new possibilities across the entire ecosystem. It’s more than a game-changer. It’s a paradigm shift.\n\nReady to take your AI journey to the next level? Let’s circle back in the comments.' },
+    { n: 'Dr Felix Harrow', i: 'FH', c: '#2F7D6B', h: 'Global Head of Omnichannel Excellence, Medical Affairs | KOL whisperer', t: '1d', s: '412 reactions · 58 comments · 9 reposts',
+      b: 'Excited to share that our patient-centric, AI-powered omnichannel ecosystem just won Best Holistic Engagement Journey at an awards dinner we also sponsored.\n\nThis is what happens when you align cross-functional stakeholders around one north star: impactful, actionable, mission-critical learnings.\n\nHuge thanks to the team for their passionate commitment to best practices. We are only scratching the surface of the realm of possibility.' },
+    { n: 'Dev Hustleworth', i: 'DH', c: '#8C3F5C', h: 'Founder (stealth) | Ex-Bigco | Building in public', t: '2d', s: '2,310 reactions · 486 comments',
+      b: '4:30am. Ice bath. Journaling. Cold brew.\n\nWhile you were sleeping, I was ideating.\n\nRockstars don’t wait for permission. Ninjas don’t ask for bandwidth. The hustle IS the strategy.\n\nMy team has one rule: move the needle 10x or go home. We don’t chase low-hanging fruit. We boil the ocean, then we pivot.\n\nGrowth mindset is a lifestyle. Agree?' },
+    { n: 'Marguerite Olsen', i: 'MO', c: '#5B6B2F', h: 'Chief People & Culture Officer | Curating agile, world-class teams', t: '3d', s: '977 reactions · 203 comments · 18 reposts',
+      b: 'We don’t have employees. We have an ecosystem of passionate rockstars.\n\nWe don’t have meetings. We have deep dives.\n\nWe don’t have layoffs. We have a strategic rightsizing of our talent landscape to unlock robust, next-gen growth.\n\nProud to lead a culture where everyone brings their whole self to work, as long as their whole self is in alignment with Q3 priorities.' }
+  ];
+
+  var feed = document.getElementById('feed');
+  function mk(tag, cls, text, parent) {
+    var e = document.createElement(tag); if (cls) e.className = cls;
+    if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e;
+  }
+  function renderFeed() {
+    feed.textContent = '';
+    POSTS.forEach(function (p) {
+      var a = mk('article', 'post', null, feed);
+      var head = mk('header', 'post-head', null, a);
+      var av = mk('div', 'avatar', p.i, head); av.style.background = p.c; av.setAttribute('aria-hidden', 'true');
+      var who = mk('div', null, null, head);
+      var name = mk('div', 'name', p.n, who); mk('span', 'deg', ' · 2nd', name);
+      mk('div', 'headline', p.h, who);
+      mk('div', 'time', p.t + ' · Edited', who);
+      var text = mk('div', 'post-text clamped', null, a);
+      var body = mk('div', 'post-body', null, text);
+      p.b.split('\n\n').forEach(function (para) {
+        var el = mk('p', null, null, body);
+        para.split('\n').forEach(function (ln, i) {
+          if (i) el.appendChild(document.createElement('br'));
+          el.appendChild(document.createTextNode(ln));
+        });
+      });
+      var more = mk('button', 'more', '…more', text);
+      more.type = 'button'; more.setAttribute('aria-expanded', 'false');
+      more.addEventListener('click', function () {
+        text.classList.remove('clamped'); more.setAttribute('aria-expanded', 'true'); more.hidden = true;
+      });
+      mk('div', 'post-stats', p.s, a);
+    });
+  }
+  renderFeed();
+
+  var G = window.SlopGoblin;
+  document.getElementById('p0').appendChild(G.portrait(0));
+  document.getElementById('p1').appendChild(G.portrait(G.fatFor(84)));
+  document.getElementById('mini').appendChild(G.portrait(0.3));
+  document.getElementById('more').textContent = 'and ' + (G.menuSize + G.phraseCount - 21) + ' more, including whole phrases.';
+
+  var releaseBtn = document.getElementById('release');
+  var refillBtn = document.getElementById('refill');
+  var gob = null;
+  function release() {
+    if (gob && gob.alive) { gob.poke(); return; }
+    refillBtn.classList.remove('nudge');
+    gob = G({
+      root: feed,
+      greeting: 'Ooh. A feed.',
+      siteLabel: 'the practice feed',
+      onEmpty: function () { refillBtn.classList.add('nudge'); },
+      onDismiss: function () { releaseBtn.textContent = 'Release the goblin'; refillBtn.classList.remove('nudge'); }
+    });
+    releaseBtn.textContent = 'Poke the goblin';
+  }
+  releaseBtn.addEventListener('click', release);
+  refillBtn.addEventListener('click', function () {
+    renderFeed(); refillBtn.classList.remove('nudge');
+    if (!gob || !gob.alive) release();
+  });
+
+  var shareCopy = document.getElementById('share-copy');
+  shareCopy.addEventListener('click', function () {
+    var link = 'https://' + G.site + '/';
+    try {
+      navigator.clipboard.writeText(link).then(function () { shareCopy.textContent = 'Link copied'; },
+        function () { shareCopy.textContent = link; });
+    } catch (err) { shareCopy.textContent = link; }
+  });
+  var bm = document.getElementById('bm');
+  var code = document.getElementById('code');
+  bm.setAttribute('href', BOOKMARKLET);
+  bm.addEventListener('click', function (e) { e.preventDefault(); release(); });
+  code.value = BOOKMARKLET;
+  var copyBtn = document.getElementById('copy');
+  copyBtn.addEventListener('click', function () {
+    function fallback() { code.focus(); code.select(); copyBtn.textContent = 'Selected: press ⌘C'; }
+    try {
+      navigator.clipboard.writeText(BOOKMARKLET).then(function () { copyBtn.textContent = 'Copied'; }, fallback);
+    } catch (err) { fallback(); }
+  });
+})();
+</script>

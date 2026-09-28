@@ -705,14 +705,6 @@
         say(st.translate ? 'Translator on. Plain English incoming.' : 'Translator off. Just eating.', 1600);
       });
       hudCount.textContent = '0'; hudGirth.textContent = girthFor(0) + ' · 0 servings'; hudLast.textContent = '—';
-      var row7 = el('div', { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginTop: '6px' }, hud);
-      el('span', { color: 'rgba(238,243,228,.6)' }, row7).textContent = 'Video mode';
-      var vidBtn = el('button', { border: '1px solid rgba(238,243,228,.35)', borderRadius: '7px', padding: '3px 10px', background: 'transparent',
-        color: '#eef3e4', font: 'inherit', fontSize: '11px', fontWeight: '700', cursor: 'pointer', lineHeight: '1.2' }, row7);
-      vidBtn.type = 'button'; vidBtn.textContent = 'Start';
-      vidBtn.title = 'Blurs names, faces and images and hides the sidebars, so you can screen-record the goblin and share it';
-      vidBtn.addEventListener('click', function (e) { e.stopPropagation(); dismiss(true); startVideoMode(); });
-      if (opts.video) row7.style.display = 'none';
       if (opts.hud === false) hud.style.display = 'none';
 
       var vh0 = W.innerHeight;
@@ -1148,7 +1140,16 @@
         st.wob = 0.9;
         say(pick(['I’m working here.', 'Busy. Digesting synergy.', 'No refunds.', 'Per my last burp…', 'Let’s take this offline.']));
       }
-      function onKey(e) { if (e.key === 'Escape' && !receiptEl) dismiss(); }
+      function onKey(e) {
+        if (receiptEl) return;
+        if (e.key === 'Escape') { dismiss(); return; }
+        // Hidden shortcut: V switches to video mode (blurred names and faces) for screen recording.
+        if ((e.key === 'v' || e.key === 'V') && !opts.video && !e.metaKey && !e.ctrlKey && !e.altKey) {
+          var t = e.target;
+          if (t && t.closest && (t.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"]') || t.isContentEditable)) return;
+          dismiss(true); startVideoMode();
+        }
+      }
       function dismiss(silent) {
         if (!api.alive) return;
         api.alive = false; cancelAnimationFrame(raf);

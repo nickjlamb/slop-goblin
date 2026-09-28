@@ -320,6 +320,75 @@
       return res + txt.slice(at);
     }
 
+
+    /* ---------- video mode: blur people, hide the side panels, bigger goblin ---------- */
+    var PEOPLE_LINKS = 'a[href*="/in/"],a[href*="/company/"],a[href*="/showcase/"],a[href*="/school/"],a[href*="/groups/"]';
+    var BLUR_SEL = PEOPLE_LINKS + ',[data-slop-blur]';
+    var VIDEO_CSS = [
+      'img, video, picture, image { filter: blur(14px) !important; }',
+      BLUR_SEL + ' { filter: blur(7px) !important; }',
+      // LinkedIn's side columns and the messaging bar (current and older layouts)
+      'aside[aria-label="Sidebar"], aside[aria-label="Aside"], #interop-outlet, #msg-overlay, .msg-overlay-container,' +
+      ' .scaffold-layout__aside, .scaffold-layout__sidebar { display: none !important; }'
+    ].join('\n');
+    // "Amanda Smith likes this", "Claude reposted this", "Sam Jones and 64 others": names that aren't links
+    var SOCIAL_RE = /\b(?:likes?|loves?|celebrates?|supports?|reposted|commented on|finds?|appreciates?|replied to)\b[^.]{0,40}\bthis\b|\band \d[\d,]* others?\b/i;
+    var videoSheet = null, videoTimer = 0;
+    function blurSocial() {
+      var els = D.querySelectorAll('p, span');
+      for (var i = 0; i < els.length; i++) {
+        var e = els[i];
+        if (e.hasAttribute('data-slop-blur') || e.closest('[' + TAG + ']')) continue;
+        var t = e.textContent;
+        if (t.length > 160 || !SOCIAL_RE.test(t)) continue;
+        (e.closest('p') || e).setAttribute('data-slop-blur', '');
+      }
+      // An author's name link often sits beside their headline rather than around it, so blur the small
+      // column that holds name, headline and time. Inline @mentions in post text are left to the link blur.
+      var links = D.querySelectorAll(PEOPLE_LINKS);
+      for (var j = 0; j < links.length; j++) {
+        var a = links[j];
+        if (!a.querySelector('div, figure, img') || a.closest('[data-slop-blur]') || a.closest('[' + TAG + ']')) continue;
+        var best = null, up = a.parentElement;
+        for (var k = 0; up && up !== D.body && k < 4; k++, up = up.parentElement) {
+          if (up.getBoundingClientRect().height > 110 || up.textContent.length > 300) break;
+          best = up;
+        }
+        if (best) best.setAttribute('data-slop-blur', '');
+      }
+    }
+    function setVideoMode(on) {
+      if (on && !videoSheet) {
+        try {
+          videoSheet = new CSSStyleSheet(); videoSheet.replaceSync(VIDEO_CSS);
+          D.adoptedStyleSheets = D.adoptedStyleSheets.concat([videoSheet]);
+        } catch (err) {
+          videoSheet = D.createElement('style'); videoSheet.setAttribute(TAG, ''); videoSheet.textContent = VIDEO_CSS; D.head.appendChild(videoSheet);
+        }
+        blurSocial(); videoTimer = setInterval(blurSocial, 700);
+      } else if (!on && videoSheet) {
+        if (videoSheet.nodeType) videoSheet.remove();
+        else D.adoptedStyleSheets = D.adoptedStyleSheets.filter(function (x) { return x !== videoSheet; });
+        videoSheet = null; clearInterval(videoTimer);
+        var marked = D.querySelectorAll('[data-slop-blur]');
+        for (var i = 0; i < marked.length; i++) marked[i].removeAttribute('data-slop-blur');
+      }
+    }
+    function startVideoMode() {
+      setVideoMode(true);
+      var box = el('div', { position: 'fixed', left: '50%', top: '42%', transform: 'translate(-50%,-50%)', zIndex: String(Z + 1),
+        font: '900 120px/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', color: '#f6d84a', pointerEvents: 'none',
+        textShadow: '0 0 2px #1c2317, 3px 3px 0 #1c2317, -3px 3px 0 #1c2317, 3px -3px 0 #1c2317, -3px -3px 0 #1c2317, 6px 9px 0 #1c2317',
+        margin: '0', padding: '0', background: 'transparent', letterSpacing: 'normal' }, D.body);
+      var n = 3; box.textContent = String(n);
+      var tick = setInterval(function () {
+        n--;
+        if (n > 0) { box.textContent = String(n); return; }
+        clearInterval(tick); box.remove();
+        W.__slopGoblin = SlopGoblin({ scale: 1.5, video: true, hud: false });
+      }, 800);
+    }
+
     /* ---------- the receipt: one canvas, shown on screen and saved as the PNG ---------- */
     var SITE = 'slopgoblin.pharmatools.ai';
     function drawHead(ctx, cx, cy, s, f) {
@@ -636,12 +705,22 @@
         say(st.translate ? 'Translator on. Plain English incoming.' : 'Translator off. Just eating.', 1600);
       });
       hudCount.textContent = '0'; hudGirth.textContent = girthFor(0) + ' · 0 servings'; hudLast.textContent = '—';
+      var row7 = el('div', { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginTop: '6px' }, hud);
+      el('span', { color: 'rgba(238,243,228,.6)' }, row7).textContent = 'Video mode';
+      var vidBtn = el('button', { border: '1px solid rgba(238,243,228,.35)', borderRadius: '7px', padding: '3px 10px', background: 'transparent',
+        color: '#eef3e4', font: 'inherit', fontSize: '11px', fontWeight: '700', cursor: 'pointer', lineHeight: '1.2' }, row7);
+      vidBtn.type = 'button'; vidBtn.textContent = 'Start';
+      vidBtn.title = 'Blurs names, faces and images and hides the sidebars, so you can screen-record the goblin and share it';
+      vidBtn.addEventListener('click', function (e) { e.stopPropagation(); dismiss(true); startVideoMode(); });
+      if (opts.video) row7.style.display = 'none';
+      if (opts.hud === false) hud.style.display = 'none';
 
       var vh0 = W.innerHeight;
       var st = { x: -50, y: vh0 * 0.62, eaten: 0, servings: 0, opened: 0, f: 0, fShown: 0, mode: 'enter', target: null,
         mouth: 0, arm: 0, wob: 0, phase: 0, blink: 0, blinkT: 0, nextBlink: 2.5, look: { x: 1, y: 0 },
         paused: false, since: 0, emptyScrolls: 0, busyUntil: 0, bubbleUntil: 0, chompUntil: 0, moving: false, log: [] };
       var bubbleW = 0, bubbleH = 0, bubbleKey = '', phrase = '', scroller = null;
+      var skipSel = opts.video ? SKIP + ',' + BLUR_SEL : SKIP; // in video mode, never eat (and so reveal) blurred text
       setTranslate(opts.translate !== false);
 
       /* Phrases (greetings, burps, reactions) sit on the top line of the bubble;
@@ -686,7 +765,7 @@
         if (!v || v.length < 3) return NodeFilter.FILTER_REJECT;
         if (!hasSlop(v)) return NodeFilter.FILTER_REJECT;
         var p = n.parentElement;
-        if (!p || p.closest(SKIP) || p.isContentEditable) return NodeFilter.FILTER_REJECT;
+        if (!p || p.closest(skipSel) || p.isContentEditable) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       }
       function findTarget() {
@@ -1070,7 +1149,7 @@
         say(pick(['I’m working here.', 'Busy. Digesting synergy.', 'No refunds.', 'Per my last burp…', 'Let’s take this offline.']));
       }
       function onKey(e) { if (e.key === 'Escape' && !receiptEl) dismiss(); }
-      function dismiss() {
+      function dismiss(silent) {
         if (!api.alive) return;
         api.alive = false; cancelAnimationFrame(raf);
         if (st.pendingReveal) st.pendingReveal();
@@ -1078,7 +1157,8 @@
         W.removeEventListener('keydown', onKey, true);
         if (W.__slopGoblin === api) W.__slopGoblin = null;
         if (opts.onDismiss) opts.onDismiss(st.eaten);
-        if (!receiptEl && opts.receipt !== false) showReceipt();
+        if (!receiptEl && opts.receipt !== false && silent !== true) showReceipt();
+        if (opts.video && !receiptEl) setVideoMode(false);
       }
 
       /* ---------- the bill ---------- */
@@ -1146,6 +1226,7 @@
         receiptEl.remove(); receiptEl = null;
         W.removeEventListener('keydown', receiptKey, true);
         st.paused = pausedBefore;
+        if (opts.video && !api.alive) setVideoMode(false);
       }
       wrap.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); poke(); });
       W.addEventListener('keydown', onKey, true);
@@ -1167,6 +1248,7 @@
     SlopGoblin.translate = translateText;
     SlopGoblin.site = SITE;
     SlopGoblin.drawReceipt = drawReceipt;
+    SlopGoblin.video = startVideoMode;
     return SlopGoblin;
   }
 })();

@@ -13,6 +13,7 @@
 <img alt="Network requests: 0" src="https://img.shields.io/badge/network%20requests-0-4b762a">
 <img alt="Runtime dependencies: 0" src="https://img.shields.io/badge/runtime%20dependencies-0-4b762a">
 <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-4b762a"></a>
+<a href="https://doi.org/10.5281/zenodo.23034803"><img alt="DOI 10.5281/zenodo.23034803" src="https://zenodo.org/badge/DOI/10.5281/zenodo.23034803.svg"></a>
 </p>
 
 **[Try it live](https://slopgoblin.pharmatools.ai)** · [Quick start](#quick-start) · [Examples](#examples) · [How it works](#how-it-works) · [Privacy](#privacy) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
@@ -212,7 +213,7 @@ See [CHANGELOG.md](CHANGELOG.md) and the [releases](https://github.com/nickjlamb
 
 ## Credits
 
-Made by [Nick Lamb](https://www.pharmatools.ai) at PharmaTools.AI. Inspired by Hugo Duprez’s [Destroy Any Website](https://destroy.spritefusion.com). If you use the goblin in a talk or paper, [CITATION.cff](CITATION.cff) has the details.
+Made by [Nick Lamb](https://www.pharmatools.ai) at PharmaTools.AI. Inspired by Hugo Duprez’s [Destroy Any Website](https://destroy.spritefusion.com). If you use the goblin in a talk or paper, please cite it as [doi:10.5281/zenodo.23034803](https://doi.org/10.5281/zenodo.23034803), which always points to the latest version; [CITATION.cff](CITATION.cff) has the details.
 
 Not affiliated with, or endorsed by, LinkedIn.
 

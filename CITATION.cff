@@ -12,6 +12,14 @@ authors:
     orcid: "https://orcid.org/0009-0009-6266-8499"
     affiliation: PharmaTools.AI
 version: 1.0.0
+doi: 10.5281/zenodo.23034803
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23034803
+    description: "Concept DOI: always resolves to the latest version"
+  - type: doi
+    value: 10.5281/zenodo.23034804
+    description: "Version 1.0.0"
 date-released: "2026-09-29"
 license: MIT
 url: "https://slopgoblin.pharmatools.ai"

@@ -7,6 +7,10 @@ anything that changes how you install or embed him is a major one.
 
 ## [Unreleased]
 
+### Added
+
+- A Zenodo DOI, [10.5281/zenodo.23034803](https://doi.org/10.5281/zenodo.23034803), shown as a badge in the README and recorded in CITATION.cff.
+
 ### Changed
 
 - Credit Hugo Duprez’s Destroy Any Website by its full title, on the site and in the README.

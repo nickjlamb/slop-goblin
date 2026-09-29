@@ -1,16 +1,23 @@
-/* The Slop Goblin — eats buzzwords, gets fat.
-   Self-contained, no innerHTML, no external loads, styles set via CSSOM only,
-   so it survives strict CSP / Trusted Types pages when run as a bookmarklet. */
-(function () {
+/* The Slop Goblin: eats buzzwords, gets fat, spits out plain English.
+   https://github.com/nickjlamb/slop-goblin · MIT licence
+
+   Self-contained: no innerHTML, no network requests, styles set via CSSOM only,
+   so it survives strict CSP / Trusted Types pages when run as a bookmarklet.
+   Without a DOM (Node), it loads the translator only: see SlopGoblin.translate and SlopGoblin.bites. */
+(function (root) {
   'use strict';
-  var W = window, D = document;
-  if (!W.SlopGoblin) W.SlopGoblin = factory();
+  var W = root, D = root.document;
+  var api = W.SlopGoblin || factory();
+  W.SlopGoblin = api;
+  if (typeof module === 'object' && module && module.exports) module.exports = api;
+  if (!D || !D.body) return; // no page to walk on: translator only
   if (!W.__SLOP_GOBLIN_NO_AUTOSTART) {
     if (W.__slopGoblin && W.__slopGoblin.alive) W.__slopGoblin.poke();
     else W.__slopGoblin = W.SlopGoblin({});
   }
 
   function factory() {
+    var VERSION = '1.0.0';
     var NS = 'http://www.w3.org/2000/svg';
     var TAG = 'data-slop-goblin';
     var Z = 2147483646;
@@ -48,7 +55,7 @@
       bandwidth: 'time', ecosystem: 'network', ecosystems: 'networks', stakeholder: 'person involved', stakeholders: 'people involved',
       alignment: 'agreement', holistic: 'overall', holistically: 'overall', scalable: 'able to grow', scalability: 'room to grow',
       empower: 'let', empowers: 'lets', empowered: 'let', empowering: 'letting', empowerment: 'freedom',
-      innovative: 'new', innovation: 'new ideas', innovations: 'new ideas', ideate: 'plan', ideation: 'planning', ideating: 'planning',
+      innovative: 'new', innovation: 'progress', innovations: 'ideas', ideate: 'plan', ideation: 'planning', ideating: 'planning',
       learnings: 'lessons', actionable: 'useful', touchbase: 'talk', touchingbase: 'talking', doubledown: 'try harder',
       pivot: 'change plan', pivots: 'changes plan', pivoted: 'changed plan', pivoting: 'changing plan', northstar: 'goal',
       unlock: 'get', unlocks: 'gets', unlocked: 'got', unlocking: 'getting',
@@ -271,6 +278,8 @@
       ['going above and beyond', 'working extra'], ['goes above and beyond', 'works extra'],
       ['went above and beyond', 'worked extra'], ['go above and beyond', 'work extra'],
       ['work hard,? play hard', 'long hours'],
+      ['unicorn (?:hires|candidates)', 'perfect hires'], ['unicorn (?:hire|candidate)', 'perfect hire'],
+      ['an innovation', 'a new idea'],
       ['(?:an )?entrepreneurial (?:mindset|spirit)', 'initiative'],
       ['what are your thoughts\\?', '(please comment)'], ['thoughts\\?', '(please comment)']
     ];
@@ -316,8 +325,19 @@
     }
     function translateText(txt) {
       var parts = findSlop(txt), res = '', at = 0;
-      parts.forEach(function (p) { res += txt.slice(at, p[0]) + (plainFor(p[2]) || ''); at = p[1]; });
+      parts.forEach(function (p) {
+        var out = plainFor(p[2]) || '';
+        res = withArticle(res + txt.slice(at, p[0]), out) + out; at = p[1];
+      });
       return res + txt.slice(at);
+    }
+    /* "an innovative solution" -> "a product": fix a trailing a/an in `before` for the word that follows. */
+    function withArticle(before, out) {
+      var m = /(^|\s)(an?|An?)\s$/.exec(before);
+      if (!m || !out) return before;
+      var art = m[2], an = /^[aeiou]/i.test(out) && !/^(one|use|uni|eu)/i.test(out);
+      var want = (art[0] === 'A' ? 'A' : 'a') + (an ? 'n' : '');
+      return want === art ? before : before.slice(0, before.length - art.length - 1) + want + ' ';
     }
 
 
@@ -1016,11 +1036,8 @@
       /* Translator mode: spit the plain-English version back into the sentence. */
       function fixArticle(prevNode, out) {
         if (!prevNode || prevNode.nodeType !== 3) return;
-        var v = prevNode.nodeValue, m = /(^|\s)(an?|An?)\s$/.exec(v);
-        if (!m) return;
-        var art = m[2], an = /^[aeiou]/i.test(out) && !/^(one|use|uni|eu)/i.test(out);
-        var want = (art[0] === 'A' ? 'A' : 'a') + (an ? 'n' : '');
-        if (want !== art) prevNode.nodeValue = v.slice(0, v.length - art.length - 1) + want + ' ';
+        var v = prevNode.nodeValue, fixed = withArticle(v, out);
+        if (fixed !== v) prevNode.nodeValue = fixed;
       }
       function spit(span, orig, out, font, done) {
         st.mode = 'spit'; st.spitText = out;
@@ -1247,9 +1264,17 @@
     SlopGoblin.menuSize = FOOD.length + 1;
     SlopGoblin.phraseCount = PHRASES.length;
     SlopGoblin.translate = translateText;
+    /* Every bite the goblin would take from a string, in order: { text, start, end, servings, plain }. */
+    SlopGoblin.bites = function (text) {
+      return findSlop(String(text)).map(function (b) {
+        return { text: b[2], start: b[0], end: b[1], servings: servingsFor(b[2]), plain: plainFor(b[2]) };
+      });
+    };
+    SlopGoblin.girthFor = girthFor;
+    SlopGoblin.version = VERSION;
     SlopGoblin.site = SITE;
     SlopGoblin.drawReceipt = drawReceipt;
     SlopGoblin.video = startVideoMode;
     return SlopGoblin;
   }
-})();
+})(typeof window !== 'undefined' ? window : globalThis);

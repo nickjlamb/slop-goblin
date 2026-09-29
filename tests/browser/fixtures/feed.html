@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Practice feed</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; margin: 0; padding: 48px 32px; background: #f4f2ee; }
+  article { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin: 0 auto 16px; max-width: 560px; }
+  .clamped .body { max-height: 3em; overflow: hidden; }
+</style>
+<article>
+  <p>I’m thrilled to announce that after 11 incredible years, I’m embarking on a new journey.</p>
+  <p>We leverage synergies to drive meaningful impact. Agree?</p>
+</article>
+<article class="clamped" id="clamped">
+  <div class="body">
+    <p>Short and innocent first line.</p>
+    <p>Hidden below the fold: our AI-first, industry-leading platform is a groundbreaking, end-to-end solution.</p>
+  </div>
+  <button type="button" id="more" onclick="this.parentElement.classList.remove('clamped'); this.remove()">… more</button>
+</article>
+<article>
+  <p>We don’t have layoffs. We have a strategic rightsizing of our talent landscape.</p>
+</article>
+<p style="text-align:center"><a id="bookmarklet" href="#">Slop Goblin</a></p>

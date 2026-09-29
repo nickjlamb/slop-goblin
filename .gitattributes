@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+*.png binary
+*.gif binary
+*.woff2 binary
+
+# Built from src/ by `npm run build`: collapsed in diffs and left out of language stats.
+index.html linguist-generated=true
+dist/** linguist-generated=true
+examples/before-and-after.md linguist-generated=true
+docs/architecture-*.svg linguist-generated=true
+fonts/** linguist-vendored=true

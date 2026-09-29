@@ -1,0 +1,57 @@
+name: Bug report
+description: The goblin misbehaved, got stuck, or broke a page
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did he do, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we reproduce it?
+      description: The page (LinkedIn feed, a profile, another site), and what you clicked.
+      placeholder: |
+        1. Open the LinkedIn feed
+        2. Click the Slop Goblin bookmark
+        3. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome
+        - Edge
+        - Brave
+        - Arc
+        - Firefox
+        - Safari
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: macOS 15, Windows 11, ...
+  - type: input
+    id: version
+    attributes:
+      label: Goblin version
+      description: Shown in the footer of slopgoblin.pharmatools.ai. If you're not sure, drag the green button to your bookmarks bar again and retry first.
+      placeholder: v1.0.0
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: Optional. Open the developer tools (⌥⌘J or Ctrl+Shift+J) and paste any red errors.
+      render: text
+  - type: markdown
+    attributes:
+      value: |
+        Screenshots help, but please blur names and faces before attaching them.

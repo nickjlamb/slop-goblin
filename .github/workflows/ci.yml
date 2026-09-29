@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Built files are committed
+        run: |
+          if ! git diff --quiet -- index.html dist README.md CONTRIBUTING.md; then
+            git diff --stat -- index.html dist README.md CONTRIBUTING.md
+            echo "::error::The build changed committed files. Run 'npm run build' and commit the result."
+            exit 1
+          fi
+      - name: Unit tests
+        run: npm test
+
+  browsers:
+    name: Smoke test (${{ matrix.browser }})
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install ${{ matrix.browser }}
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Smoke test
+        run: npm run test:browser
+        env:
+          BROWSERS: ${{ matrix.browser }}

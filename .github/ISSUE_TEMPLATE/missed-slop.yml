@@ -1,0 +1,46 @@
+name: Missed slop
+description: A buzzword or phrase the goblin should have eaten
+title: "Missed slop: "
+labels: ["slop"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for spotting it. Please quote the phrase, not the person: remove names from any example.
+  - type: input
+    id: phrase
+    attributes:
+      label: The slop
+      description: The word or phrase he walked past.
+      placeholder: "we're on a mission to"
+    validations:
+      required: true
+  - type: input
+    id: plain
+    attributes:
+      label: What it means in plain English
+      description: Shorter and duller is better. Leave blank if you're not sure.
+      placeholder: "we want to"
+  - type: textarea
+    id: example
+    attributes:
+      label: An example sentence
+      description: How it's used in the wild, with any names removed.
+      placeholder: "We're on a mission to democratise synergy for everyone."
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did you see it?
+      options:
+        - A LinkedIn post
+        - A LinkedIn comment
+        - A LinkedIn profile or headline
+        - A job advert
+        - Somewhere else
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you send
+      options:
+        - label: I removed any names and personal details from my example.
+          required: true

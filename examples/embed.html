@@ -1,0 +1,57 @@
+<!doctype html>
+<!--
+  Put the Slop Goblin on your own page.
+
+  Open this file in a browser from a clone of the repo (it loads ../dist/goblin.min.js).
+  On your own site, load a pinned release from the CDN instead:
+
+    <script>window.__SLOP_GOBLIN_NO_AUTOSTART = true;</script>
+    <script src="https://cdn.jsdelivr.net/gh/nickjlamb/slop-goblin@v1.0.0/dist/goblin.min.js"></script>
+
+  Setting __SLOP_GOBLIN_NO_AUTOSTART stops him starting on load, so you decide when he appears.
+-->
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Slop Goblin: embed example</title>
+  <style>
+    body { font: 17px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 640px; margin: 48px auto; padding: 0 16px; color: #1f2328; }
+    button { font: inherit; padding: 8px 14px; border-radius: 999px; border: 2px solid #1f2328; background: #86ad5e; cursor: pointer; }
+    #log { font: 13px/1.5 ui-monospace, Menlo, monospace; color: #59636e; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Quarterly all-hands</h1>
+  <article id="memo">
+    <p>In today’s fast-paced digital landscape, it’s crucial to leverage synergies across the ecosystem.</p>
+    <p>We’re excited to share that our north star remains stakeholder alignment. Let’s circle back on the
+      low-hanging fruit and take this offline.</p>
+    <p>At the end of the day, we’re just getting started. Thoughts?</p>
+  </article>
+
+  <p><button type="button" id="feed">Feed the goblin this memo</button></p>
+  <div id="log"></div>
+
+  <script>window.__SLOP_GOBLIN_NO_AUTOSTART = true;</script>
+  <script src="../dist/goblin.min.js"></script>
+  <script>
+    const log = line => { document.getElementById('log').textContent += line + '\n'; };
+
+    document.getElementById('feed').addEventListener('click', () => {
+      if (window.gob && window.gob.alive) { window.gob.poke(); return; }
+      window.gob = SlopGoblin({
+        root: document.getElementById('memo'),  // only eat inside this element
+        greeting: 'Ooh. A memo.',                // first thing he says
+        siteLabel: 'the all-hands memo',         // "Table" line on the bill
+        autoScroll: false,                       // stay put when the memo is clean
+        translate: true,                         // spit plain English back (false leaves gaps)
+        receipt: true,                           // show the bill when he's sent home
+        onEat: (count, bite, girth) => log(`#${count} ${bite} → ${SlopGoblin.translate(bite)}  (${girth})`),
+        onEmpty: eaten => log(`Memo is clean after ${eaten} bites.`),
+        onDismiss: eaten => log(`Sent home after ${eaten} bites.`)
+      });
+    });
+  </script>
+</body>
+</html>

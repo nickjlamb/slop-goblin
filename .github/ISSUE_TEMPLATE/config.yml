@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Try the goblin
+    url: https://slopgoblin.pharmatools.ai
+    about: The live site, with a practice feed and the bookmark to install.
+  - name: Report a security problem
+    url: https://github.com/nickjlamb/slop-goblin/security/advisories/new
+    about: Please report vulnerabilities privately, not in a public issue.

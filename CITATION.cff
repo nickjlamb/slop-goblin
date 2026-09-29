@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use the Slop Goblin in a talk, article or paper, please cite it as below."
+type: software
+title: "The Slop Goblin"
+abstract: >-
+  A browser bookmarklet that walks down a LinkedIn feed eating buzzwords and corporate
+  phrases, replaces them with plain English, and prints an itemised receipt of what it ate.
+  It runs entirely in the browser, with no network requests.
+authors:
+  - family-names: Lamb
+    given-names: Nick
+    orcid: "https://orcid.org/0009-0009-6266-8499"
+    affiliation: PharmaTools.AI
+version: 1.0.0
+date-released: "2026-09-29"
+license: MIT
+url: "https://slopgoblin.pharmatools.ai"
+repository-code: "https://github.com/nickjlamb/slop-goblin"
+keywords:
+  - bookmarklet
+  - plain language
+  - corporate jargon
+  - LinkedIn
+  - satire

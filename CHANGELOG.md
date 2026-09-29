@@ -7,6 +7,10 @@ anything that changes how you install or embed him is a major one.
 
 ## [Unreleased]
 
+### Changed
+
+- Credit Hugo Duprez’s Destroy Any Website by its full title, on the site and in the README.
+
 ## [1.0.0] - 2026-09-29
 
 The first tagged release. The site has been live at [slopgoblin.pharmatools.ai](https://slopgoblin.pharmatools.ai)

@@ -212,7 +212,7 @@ See [CHANGELOG.md](CHANGELOG.md) and the [releases](https://github.com/nickjlamb
 
 ## Credits
 
-Made by [Nick Lamb](https://www.pharmatools.ai) at PharmaTools.AI. Inspired by Hugo Duprez’s [Destroy](https://destroy.spritefusion.com). If you use the goblin in a talk or paper, [CITATION.cff](CITATION.cff) has the details.
+Made by [Nick Lamb](https://www.pharmatools.ai) at PharmaTools.AI. Inspired by Hugo Duprez’s [Destroy Any Website](https://destroy.spritefusion.com). If you use the goblin in a talk or paper, [CITATION.cff](CITATION.cff) has the details.
 
 Not affiliated with, or endorsed by, LinkedIn.
 
